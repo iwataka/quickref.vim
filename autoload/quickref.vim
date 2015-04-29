@@ -48,7 +48,8 @@ fu! quickref#start_at_last_dir()
 endfu
 
 fu! quickref#path_list()
-    let path_list = s:read_cache() + s:read_var()
+    let path_list = s:validate(s:readcache()) + s:read_var()
+    echom string(path_list)
     if g:quickref_include_rtp
         call extend(path_list, split(&rtp, ','))
     endif
@@ -56,32 +57,17 @@ fu! quickref#path_list()
 endfu
 
 fu! s:read_path_list(lines)
-  let l:exclusive_paths = []
-  let l:inclusive_paths = []
+  let exclusives = []
+  let paths = []
   for line in a:lines
-    if line =~ '^!\s\?'
-      let l:tmp_paths = split(expand(substitute(line, '^!\s\?', "", "")), '\n')
-      call s:add_dirs(l:exclusive_paths, l:tmp_paths)
-    elseif line !~ '^#' && line != ''
-      let l:tmp_paths = split(expand(line), '\n')
-      call s:add_dirs(l:inclusive_paths, l:tmp_paths)
+    if line =~ '^\s\?!\s\?'
+      call s:add_dirs(exclusives, s:validate(substitute(line, '^\s\?!\s\?', '', '')))
+    elseif line != ''
+      call s:add_dirs(paths, s:validate(line))
     endif
   endfor
-  let l:paths = []
-  for path in l:inclusive_paths
-    if index(exclusive_paths, path) == -1
-      call add(l:paths, path)
-    endif
-  endfor
-  retu l:paths
-endf
-
-fu! s:read_cache()
-  if filereadable(expand(g:quickref_cache_file))
-    retu readfile(expand(g:quickref_cache_file))
-  el
-    retu []
-  endif
+  call s:remove(paths, exclusives)
+  retu paths
 endf
 
 fu! s:read_var()
@@ -92,34 +78,10 @@ fu! s:read_var()
   endif
 endf
 
-fu! s:add_dirs(list, paths)
-  for path in a:paths
-    if isdirectory(path)
-      call add(a:list, path)
-    endif
-  endfor
-endf
-
 fu! quickref#check_ext(fname)
   let ext = fnamemodify(expand(a:fname), ':t:e')
-  for e in g:quickref_open_extensions
-    if ext == e
-      retu 1
-    endif
-  endfor
-  retu 0
+  retu index(g:quickref_open_extensions, ext) != -1
 endf
-
-fu! s:uniq(list)
-  let result = []
-  for i in range(len(a:list))
-    let item = get(a:list, i)
-    if index(a:list, item, i + 1) == -1
-      call add(result, item)
-    endif
-  endfor
-  retu result
-endfu
 
 fu! s:detect_root_upward(fname)
   let dir = fnamemodify(expand(a:fname), ':p:h')
@@ -143,20 +105,6 @@ fu! s:detect_root_downward(dir, depth)
   retu ''
 endfu
 
-fu! s:add_to_cache(path)
-  let path = resolve(a:path)
-  let path = path =~ '/$' ? path : path.'/'
-  let dir = fnamemodify(expand(g:quickref_cache_file), ':p:h')
-  if !isdirectory(dir)
-    call mkdir(dir, 'p')
-  endif
-  let lines = s:read_cache()
-  if index(lines, path) == -1
-    call add(lines, path)
-    call writefile(lines, expand(g:quickref_cache_file))
-  endif
-endfu
-
 fu! quickref#auto_detect()
   let fname = expand('%')
   let root = fnamemodify(expand(s:detect_root_upward(fname)), ':p')
@@ -168,51 +116,181 @@ fu! quickref#auto_detect()
   endif
 endfu
 
-fu! s:add_neighbor_roots_to_cache(path)
-  let upper_dir = fnamemodify(substitute(a:path, '/$', '', ''), ':h')
-  let paths = split(glob(upper_dir.'/*'), '\n')
-  for p in paths
-    if isdirectory(p)
-      let another_root = s:detect_root_downward(p, g:quickref_auto_detect_depth)
-      let another_root = fnamemodify(expand(another_root), ':p')
-      if !empty(another_root)
-        call s:add_to_cache(another_root)
+fu! s:neighbor_roots(path)
+  let upper_dir = s:parent(a:path)
+  let result = []
+  if !empty(upper_dir)
+    let paths = split(glob(upper_dir.'/*'), '\n')
+    for p in paths
+      if isdirectory(p)
+        let root = s:detect_root_downward(p, g:quickref_auto_detect_depth)
+        let root = fnamemodify(expand(root), ':p')
+        if !empty(root)
+          call add(result, root)
+        endif
       endif
-    endif
-  endfor
+    endfor
+  endif
+  retu result
 endfu
 
 fu! quickref#clear_cache()
   if filereadable(expand(g:quickref_cache_file))
-    call writefile([], expand(g:quickref_cache_file))
+    call s:writecache([])
   endif
 endfu
 
 fu! quickref#add_path_to_cache(...)
   if a:0 > 0
-    for p in a:000
-      call s:add_to_cache(p)
-    endfor
+    call s:add_to_cache(a:000)
   else
     call s:add_to_cache(getcwd())
   endif
 endfu
 
 fu! quickref#remove_path_from_cache(...)
-  let paths = s:read_cache()
   if a:0 > 0
-    for p in a:000
-      call remove(paths, index(paths, p))
-    endfor
+    call s:remove_from_cache(a:000)
   else
-    call remove(paths, index(paths, getcwd()))
+    call s:remove_from_cache(getcwd())
   endif
-  call writefile(paths, expand(g:quickref_cache_file))
 endfu
 
 fu! quickref#display_cache()
-  let paths = s:read_cache()
+  let paths = s:readcache()
   for p in paths
     echom p
   endfor
+endfu
+
+" Writes given paths to the cache file with automatically making the directory.
+" This name is derived from writefile() function.
+fu! s:writecache(paths)
+  let dir = fnamemodify(expand(g:quickref_cache_file), ':p:h')
+  if !isdirectory(dir)
+    if exists('*mkdir')
+      call mkdir(dir, 'p')
+    else
+      silent! exe '!mkdir -p '.dir
+    endif
+  endif
+  call writefile(a:paths, expand(g:quickref_cache_file))
+endfu
+
+" Reads the cache file if it exists, otherwise returns empty list.
+" This name is derived from readfile() function.
+fu! s:readcache()
+  if filereadable(expand(g:quickref_cache_file))
+    retu readfile(expand(g:quickref_cache_file))
+  el
+    retu []
+  endif
+endf
+
+" Adds a path/paths to the cache file.
+fu! s:add_to_cache(path)
+  let lines = s:readcache()
+  let path = s:validate(a:path)
+  call s:add(lines, path)
+  call s:writecache(lines)
+endfu
+
+" Removes a path/paths from the cache file.
+fu! s:remove_from_cache(path)
+  let lines = s:readcache()
+  let path = s:validate(a:path)
+  call s:remove(lines, path)
+  call s:writecache(lines)
+endfu
+
+" Adds an item/items to specified list.
+fu! s:add(list, item)
+  if type(a:item) == type([])
+    for i in a:item
+      call s:add(a:list, i)
+    endfor
+  else
+    call add(a:list, a:item)
+  endif
+endfu
+
+" Removes an item/items from specified list.
+fu! s:remove(list, item)
+  if type(a:item) == type([])
+    for i in a:item
+      call s:remove(a:list, i)
+    endfor
+  else
+    let idx = index(a:list, a:item)
+    if idx != -1
+      call remove(a:list, idx)
+    endif
+  endif
+endfu
+
+fu! s:validate(path)
+  retu map(s:resolve(s:expand(a:path)), "v:val =~ '/$' ? v:val : v:val.'/'")
+endfu
+
+" Expands a path/paths.
+fu! s:expand(path)
+  if type(a:path) == type('')
+    retu split(expand(a:path), '\n')
+  elseif type(a:path) == type([])
+    let result = []
+    for p in a:path
+      call extend(result, s:expand(p))
+    endfor
+    retu result
+  endif
+endfu
+
+" Resolves a path/paths
+fu! s:resolve(path)
+  if type(a:path) == type('')
+    retu resolve(a:path)
+  elseif type(a:path) == type([])
+    let result = []
+    for p in a:path
+      call add(result, s:resolve(p))
+    endfor
+    retu result
+  endif
+endfu
+
+" Returns a list whose elements are unique.
+fu! s:uniq(list)
+  let result = []
+  for i in range(len(a:list))
+    let item = get(a:list, i)
+    if index(a:list, item, i + 1) == -1
+      call add(result, item)
+    endif
+  endfor
+  retu result
+endfu
+
+" Adds directories in a path/paths to specified list.
+fu! s:add_dirs(list, path)
+  if type(a:path) == type('')
+    if isdirectory(a:path)
+      call add(a:list, a:path)
+    endif
+  elseif type(a:path) == type([])
+    for p in a:path
+      call s:add_dirs(a:list, p)
+    endfor
+  endif
+endf
+
+" Returns the parent directory of a given path.
+" If it doesn't exist, returns empty string.
+fu! s:parent(path)
+  let fullpath = fnamemodify(a:path, ':p')
+  if fullpath == '/'
+    retu ''
+  else
+    let p = substitute(fullpath, '/$', '', '')
+    retu fnamemodify(p, ':h')
+  endif
 endfu
