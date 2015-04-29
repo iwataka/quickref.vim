@@ -12,7 +12,7 @@ endif
 augroup quickref
   autocmd!
   autocmd BufNew *
-        \ if g:quickref_auto_detect && !getbufvar('%', '&readonly') |
+        \ if g:quickref_auto_detect && !getbufvar('%', "<afile>") |
           \ call quickref#auto_detect() |
         \ endif
 augroup END

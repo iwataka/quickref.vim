@@ -174,7 +174,7 @@ fu! s:writecache(paths)
       silent! exe '!mkdir -p '.dir
     endif
   endif
-  call writefile(a:paths, expand(g:quickref_cache_file))
+  call writefile(s:uniq(a:paths), expand(g:quickref_cache_file))
 endfu
 
 " Reads the cache file if it exists, otherwise returns empty list.
