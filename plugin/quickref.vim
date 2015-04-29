@@ -8,5 +8,8 @@ endif
 
 augroup quickref
   autocmd!
-  autocmd BufNew * if g:quickref_auto_detect | call quickref#add_path_to_cache() | endif
+  autocmd BufNew *
+        \ if g:quickref_auto_detect && !getbufvar('%', '&readonly') |
+          \ call quickref#add_path_to_cache() |
+        \ endif
 augroup END
