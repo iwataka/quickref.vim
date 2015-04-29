@@ -25,7 +25,14 @@ endf
 
 fu! ctrlp#quickref#accept(mode, str)
     call ctrlp#exit()
+    " When typing <C-t>
     if a:mode == 't'
+        silent exe 'cd '.a:str
+    " When typing <C-x>
+    elseif a:mode == 'h'
+        silent exe 'e '.a:str
+    " When typing <C-v>
+    elseif a:mode == 'v'
         silent exe 'cd '.a:str
     else
         let s:last_dir = a:str
