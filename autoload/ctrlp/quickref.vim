@@ -4,12 +4,20 @@ endif
 let g:loaded_ctrlp_quickref = 1
 
 call add(g:ctrlp_ext_vars, {
+    \ 'enter': 'ctrlp#quickref#enter()',
+    \ 'exit': 'ctrlp#quickref#exit()',
     \ 'init': 'ctrlp#quickref#init()',
     \ 'accept': 'ctrlp#quickref#accept',
     \ 'type': 'path',
     \ 'sort': 0,
     \ 'specinput': 0,
     \ })
+
+fu! ctrlp#quickref#enter()
+endfu
+
+fu! ctrlp#quickref#exit()
+endfu
 
 fu! ctrlp#quickref#init()
     retu quickref#path_list()

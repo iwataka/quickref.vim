@@ -32,7 +32,6 @@ endf
 fu! ctrlp#open#accept(mode, str)
     if quickref#check_ext(a:str)
         call system(s:open_command.' '.a:str)
-        call ctrlp#exit()
     el
         if g:quickref_readonly
             aug ctrlp-open
@@ -48,6 +47,7 @@ fu! ctrlp#open#accept(mode, str)
             au! ctrlp-open
         endif
     endif
+    call ctrlp#exit()
 endf
 
 let s:id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
