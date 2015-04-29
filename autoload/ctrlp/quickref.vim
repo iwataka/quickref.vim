@@ -12,7 +12,12 @@ call add(g:ctrlp_ext_vars, {
     \ })
 
 fu! ctrlp#quickref#init()
-    retu quickref#read_cache() + quickref#read_var()
+    let path_list = quickref#read_cache() + quickref#read_var()
+    if g:quickref_include_rtp
+        retu path_list + split(&rtp, ',')
+    else
+        retu path_list
+    endif
 endf
 
 fu! ctrlp#quickref#accept(mode, str)

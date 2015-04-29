@@ -15,6 +15,10 @@ if !exists('g:quickref_cache_file')
   let g:quickref_cache_file = '~/.cache/quickref/path_list.txt'
 endif
 
+if !exists('g:quickref_include_rtp')
+  let g:quickref_include_rtp = 1
+endif
+
 fu! quickref#start()
   if g:loaded_ctrlp
     call ctrlp#init(ctrlp#quickref#id())
