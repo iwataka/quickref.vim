@@ -27,6 +27,10 @@ if !exists('g:quickref_paths')
   let g:quickref_paths = []
 endif
 
+if !exists('g:quickref_auto_detect_depth')
+  let g:quickref_auto_detect_depth = 0
+endif
+
 fu! quickref#start()
   if g:loaded_ctrlp
     call ctrlp#init(ctrlp#quickref#id())
@@ -141,10 +145,21 @@ fu! s:uniq(list)
   retu result
 endfu
 
-fu! s:root(fname)
+fu! s:detect_root_upward(fname)
   let dir = fnamemodify(expand(a:fname), ':p:h')
   for mark in g:quickref_root_markers
     let rdir = finddir(mark, dir.';')
+    if !empty(rdir)
+      retu fnamemodify(rdir, ':h')
+    endif
+  endfor
+  retu ''
+endfu
+
+fu! s:detect_root_downward(dir, depth)
+  let dir = a:dir =~ '/$' ? a:dir : a:dir.'/'
+  for mark in g:quickref_root_markers
+    let rdir = finddir(mark, dir.'**'.a:depth)
     if !empty(rdir)
       retu fnamemodify(rdir, ':h')
     endif
@@ -166,9 +181,21 @@ endfu
 
 fu! quickref#add_path_to_cache()
   let fname = expand('%')
-  let root = fnamemodify(expand(s:root(fname)), ':p')
+  let root = fnamemodify(expand(s:detect_root_upward(fname)), ':p')
   if !empty(root)
     call s:add_to_cache(root)
+    if g:quickref_auto_detect_depth >= 0
+      let upper_dir = fnamemodify(substitute(root, '/$', '', ''), ':h')
+      let paths = split(glob(upper_dir.'/*'), '\n')
+      for p in paths
+        if isdirectory(p)
+          let another_root = fnamemodify(expand(s:detect_root_downward(p, g:quickref_auto_detect_depth)), ':p')
+          if !empty(another_root)
+            call s:add_to_cache(another_root)
+          endif
+        endif
+      endfor
+    endif
   endif
 endfu
 
