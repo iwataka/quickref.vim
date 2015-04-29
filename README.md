@@ -31,28 +31,30 @@ specified task to it.
 You have two ways to register arbitrary paths to the cache. First one is assigns
 them to `g:quickref_paths` variable like this:
 
-    let g:quickref_paths = [
-        \ '~/A/B'
-        " Wildcars are automatically expanded.
-        \ '/C/*',
-        " You want to exclude specified path, put '!' at the head.
-        \ '! /C/D/'
-    ]
+```vim
+let g:quickref_paths = [
+    \ '~/A/B'
+    " Wildcars are automatically expanded.
+    \ '/C/*',
+    " You want to exclude specified path, put '!' at the head.
+    \ '! /C/D/'
+]
+```
 
 Second one is running `:QuickrefAdd` and `:QuickrefRemove` command like this:
 
-    ```vim
-    " Registers the current working directory.
-    :QuickrefAdd
-    " Registers specified path.
-    :QuickrefAdd ~/A/B
-    " Registers specified path which contains wildcars.
-    :QuickrefAdd /C/*
-    " Removes specified path .
-    :QuickrefRemove /C/D/
-    " You can register several different paths at the same time.
-    :QuickrefAdd ~/A/B /C/*
-    ```
+```vim
+" Registers the current working directory.
+:QuickrefAdd
+" Registers specified path.
+:QuickrefAdd ~/A/B
+" Registers specified path which contains wildcars.
+:QuickrefAdd /C/*
+" Removes specified path .
+:QuickrefRemove /C/D/
+" You can register several different paths at the same time.
+:QuickrefAdd ~/A/B /C/*
+```
 
 ## CtrlP
 
