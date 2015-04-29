@@ -35,6 +35,14 @@ fu! quickref#start_at_last_dir()
   endif
 endfu
 
+fu! quickref#path_list()
+    let path_list = s:read_cache() + s:read_var()
+    if g:quickref_include_rtp
+        call extend(path_list, split(&rtp, ','))
+    endif
+    retu s:uniq(path_list)
+endfu
+
 fu! s:read_path_list(lines)
   let l:exclusive_paths = []
   let l:inclusive_paths = []
@@ -56,7 +64,7 @@ fu! s:read_path_list(lines)
   retu l:paths
 endf
 
-fu! quickref#read_cache()
+fu! s:read_cache()
   if filereadable(expand(g:quickref_cache_file))
     let l:lines = readfile(expand(g:quickref_cache_file))
     retu s:read_path_list(l:lines)
@@ -65,7 +73,7 @@ fu! quickref#read_cache()
   endif
 endf
 
-fu! quickref#read_var()
+fu! s:read_var()
   if exists('g:quickref_paths')
     retu s:read_path_list(g:quickref_paths)
   el
@@ -111,7 +119,7 @@ fu! quickref#check_ext(fname)
   retu 0
 endf
 
-fu! quickref#uniq(list)
+fu! s:uniq(list)
   let i = 0
   let len = len(a:list)
   let result = []
