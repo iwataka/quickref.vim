@@ -48,11 +48,7 @@ fu! quickref#start_at_last_dir()
 endfu
 
 fu! quickref#path_list()
-    let path_list = s:validate(s:readcache()) + s:read_var()
-    echom string(path_list)
-    if g:quickref_include_rtp
-        call extend(path_list, split(&rtp, ','))
-    endif
+    let path_list = s:validate(s:readcache()) + s:read_var() + s:rtps()
     retu s:uniq(path_list)
 endfu
 
@@ -292,5 +288,15 @@ fu! s:parent(path)
   else
     let p = substitute(fullpath, '/$', '', '')
     retu fnamemodify(p, ':h')
+  endif
+endfu
+
+" Returns validated runtime paths.
+" If g:quickref_include_rtp is 0, returns empty list.
+fu! s:rtps()
+  if g:quickref_include_rtp
+    retu s:validate(split(&rtp, ','))
+  else
+    retu []
   endif
 endfu
