@@ -189,7 +189,8 @@ fu! quickref#add_path_to_cache()
       let paths = split(glob(upper_dir.'/*'), '\n')
       for p in paths
         if isdirectory(p)
-          let another_root = fnamemodify(expand(s:detect_root_downward(p, g:quickref_auto_detect_depth)), ':p')
+          let another_root = s:detect_root_downward(p, g:quickref_auto_detect_depth)
+          let another_root = fnamemodify(expand(another_root), ':p')
           if !empty(another_root)
             call s:add_to_cache(another_root)
           endif
