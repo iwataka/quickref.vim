@@ -74,8 +74,7 @@ endf
 
 fu! s:read_cache()
   if filereadable(expand(g:quickref_cache_file))
-    let l:lines = readfile(expand(g:quickref_cache_file))
-    retu s:read_path_list(l:lines)
+    retu readfile(expand(g:quickref_cache_file))
   el
     retu []
   endif
@@ -158,12 +157,11 @@ fu! s:add_to_cache(path)
   if !isdirectory(dir)
     call mkdir(dir, 'p')
   endif
-  let lines = []
-  if filereadable(expand(g:quickref_cache_file))
-    call extend(lines, readfile(expand(g:quickref_cache_file)))
+  let lines = s:read_cache()
+  if !s:contains(lines, a:path)
+    call add(lines, a:path)
+    call writefile(lines, expand(g:quickref_cache_file))
   endif
-  call add(lines, a:path)
-  call writefile(lines, expand(g:quickref_cache_file))
 endfu
 
 fu! quickref#add_path_to_cache()
