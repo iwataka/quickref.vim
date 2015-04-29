@@ -64,10 +64,6 @@ files on the fly.
 
     Open CtrlP interface with specified paths.
 
-+ :CtrlPQuickRefLastDir
-
-    Open CtrlP interface in last selected directory.
-
 + :CtrlPQuickRefEdit
 
     Open the configuration file (~/.quickref by default).

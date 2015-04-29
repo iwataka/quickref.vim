@@ -3,6 +3,10 @@ if exists('g:loaded_ctrlp_quickref') && g:loaded_ctrlp_quickref || v:version < 7
 endif
 let g:loaded_ctrlp_quickref = 1
 
+if !exists('g:ctrlp_quickref_func_dict')
+    let g:ctrlp_quickref_func_dict = {}
+endif
+
 call add(g:ctrlp_ext_vars, {
     \ 'enter': 'ctrlp#quickref#enter()',
     \ 'exit': 'ctrlp#quickref#exit()',
@@ -35,14 +39,9 @@ fu! ctrlp#quickref#accept(mode, str)
     elseif a:mode == 'v'
         silent exe 'cd '.a:str
     else
-        let s:last_dir = a:str
         call ctrlp#init(ctrlp#open#id(), { 'dir': a:str })
     endif
 endf
-
-fu! ctrlp#quickref#last_dir()
-    call ctrlp#init(ctrlp#open#id(), { 'dir': s:last_dir })
-endfu
 
 let s:id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
 

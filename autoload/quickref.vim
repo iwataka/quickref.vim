@@ -39,14 +39,6 @@ fu! quickref#start()
   endif
 endfu
 
-fu! quickref#start_at_last_dir()
-  if g:loaded_ctrlp
-    call ctrlp#quickref#last_dir()
-  else
-    echoe 'Quickref requires CtrlP!'
-  endif
-endfu
-
 fu! quickref#path_list()
     retu s:uniq(s:readcache() + s:read_var() + s:rtps())
 endfu

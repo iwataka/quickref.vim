@@ -110,10 +110,6 @@ COMMANDS                                            *quickref-commands*
 :CtrlPQuickRef
     Open CtrlP interface with specified paths.
 
-                                                         *:CtrlPQuickRefLastDir*
-:CtrlPQuickRefLastDir
-    Open CtrlP interface in last selected directory.
-
                                                          *:CtrlPQuickRefEdit*
 :CtrlPQuickRefEdit
     Open the configuration file (~/.quickref by default).

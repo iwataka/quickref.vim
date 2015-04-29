@@ -1,5 +1,4 @@
 com! Quickref cal quickref#start()
-com! QuickrefLastDir cal quickref#start_at_last_dir()
 com! QuickrefClearCache cal quickref#clear_cache()
 com! -nargs=* -complete=dir QuickrefAdd cal quickref#add_path_to_cache(<f-args>)
 com! -nargs=* -complete=dir QuickrefRemove cal quickref#remove_path_from_cache(<f-args>)
