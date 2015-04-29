@@ -1,4 +1,4 @@
-# ctrlp-quickref.vim
+# quickref.vim
 
 ## Motivation
 
@@ -20,11 +20,11 @@ which is "open" in Mac OS, "xdg-open" in Linux OS, "start" in Windows OS or
 ## Usage
 
 After installing this plug-in, you should register some paths you want to
-search in g:ctrlp_quickref_paths variable or ~/.ctrlp-quickref file. If you
+search in g:quickref_paths variable or ~/.quickref file. If you
 want to register paths in the variable, you should write them like below in
 your vimrc.
 
-    let g:ctrlp_quickref_paths = [
+    let g:quickref_paths = [
         \ '/directory1/library_or_something_else/src',
         \ '/directory2/*/src',
         \ '/directory3/*',
@@ -33,7 +33,7 @@ your vimrc.
     ]
 
 Wildcards are automatically expanded.
-If you want to write paths in other file, you should make ~/.ctrlp-quickref
+If you want to write paths in other file, you should make ~/.quickref
 file and write them like below in it.
 
     # Write
@@ -70,25 +70,25 @@ files on the fly.
 
 + :CtrlPQuickRefEdit
 
-    Open the configuration file (~/.ctrlp-quickref by default).
+    Open the configuration file (~/.quickref by default).
 
 ## Options
 
-+ ctrlp_quickref_readonly_enabled
++ quickref_readonly_enabled
 
     Set this to 0 to open files without readonly flag (default: 1).
 
-+ ctrlp_quickref_open_extensions
++ quickref_open_extensions
 
     If you open files which have extensions contained in this list, they are
     opened by "open-command" (default: ['html', 'pdf']).
 
-+ ctrlp_quickref_configuration_file
++ quickref_configuration_file
 
     If you want to write paths in other file, set this to the path (default:
-    '~/.ctrlp-quickref').
+    '~/.quickref').
 
-+ ctrlp_quickref_paths
++ quickref_paths
 
     This list contains paths which are the candidates of this plug-in (default:
     []).

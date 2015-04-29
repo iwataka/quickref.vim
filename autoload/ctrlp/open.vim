@@ -30,11 +30,11 @@ fu! ctrlp#open#init()
 endf
 
 fu! ctrlp#open#accept(mode, str)
-    if s:check_extension(a:str)
+    if quickref#check_ext(a:str)
         call system(s:open_command.' '.a:str)
         call ctrlp#exit()
     el
-        if g:ctrlp_quickref_readonly_enabled
+        if g:quickref_readonly
             aug ctrlp-open
                 au!
                 au BufEnter *
@@ -48,15 +48,6 @@ fu! ctrlp#open#accept(mode, str)
             au! ctrlp-open
         endif
     endif
-endf
-
-fu! s:check_extension(fname)
-    for extension in g:ctrlp_quickref_open_extensions
-        if a:fname =~ '.\?\.'.extension.'$'
-            retu 1
-        endif
-    endfor
-    retu 0
 endf
 
 let s:id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)

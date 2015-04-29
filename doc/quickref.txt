@@ -1,5 +1,5 @@
-*ctrlp-quickref.txt*    provides quick access to any references
-*ctrlp_quickref* *CtrlP-QuickRef* *CtrlP-Quickref* *CtrlP_QuickRef* *CtrlP_Quickref*
+*quickref.txt*    provides quick access to any references
+*quickref*
 ===============================================================================
                          .__        __                    _____  ~
               ________ __|__| ____ |  | _________   _____/ ____\ ~
@@ -8,17 +8,17 @@
              \__   |____/|__|\___  >__|_ \ |__|    \___  >__|    ~
                 |__|             \/     \/             \/        ~
 ===============================================================================
-CONTENTS                                            *ctrlp-quickref-contents*
+CONTENTS                                            *quickref-contents*
 
-    1. Intro.................................|ctrlp-quickref-intro|
-    2. Usage.................................|ctrlp-quickref-usage|
-    2. Options...............................|ctrlp-quickref-options|
-    3. Commands..............................|ctrlp-quickref-commands|
-    4. Mappings..............................|ctrlp-quickref-mappings|
-    5. License...............................|ctrlp-quickref-license|
+    1. Intro.................................|quickref-intro|
+    2. Usage.................................|quickref-usage|
+    2. Options...............................|quickref-options|
+    3. Commands..............................|quickref-commands|
+    4. Mappings..............................|quickref-mappings|
+    5. License...............................|quickref-license|
 
 ===============================================================================
-INTRO                                                  *ctrlp-quickref-intro*
+INTRO                                                  *quickref-intro*
 
 This plug-in is an extension of CtrlP and provides quick access to any
 references in your local environment. Install this plug-in and register some
@@ -30,14 +30,14 @@ which is "open" in Mac OS, "xdg-open" in Linux OS, "start" in Windows OS or
 "cygstart" in Cygwin environment.
 
 ===============================================================================
-USAGE                                                  *ctrlp-quickref-usage*
+USAGE                                                  *quickref-usage*
 
 After installing this plug-in, you should register some paths you want to
-search in g:ctrlp_quickref_paths variable or ~/.ctrlp-quickref file. If you
+search in g:quickref_paths variable or ~/.quickref file. If you
 want to register paths in the variable, you should write them like below in
 your vimrc.
 
-    let g:ctrlp_quickref_paths = [
+    let g:quickref_paths = [
         \ '/directory1/library_or_something_else/src',
         \ '/directory2/*/src',
         \ '/directory3/*',
@@ -46,7 +46,7 @@ your vimrc.
     ]
 
 Wildcards are automatically expanded.
-If you want to write paths in other file, you should make ~/.ctrlp-quickref
+If you want to write paths in other file, you should make ~/.quickref
 file and write them like below in it.
 
     # Write
@@ -72,39 +72,39 @@ are opened with readonly flag by default.  Doing like this, you can open any
 files on the fly.
 
 ===============================================================================
-OPTIONS                                              *ctrlp-quickref-options*
+OPTIONS                                              *quickref-options*
 
 Overview:~
 
-|ctrlp_quickref_readonly_enabled|......Open files with readonly flag.
-|ctrlp_quickref_open_extensions|.......Indicates which file is opened out of
+|quickref_readonly_enabled|......Open files with readonly flag.
+|quickref_open_extensions|.......Indicates which file is opened out of
 Vim.
-|ctrlp_quickref_configuration_file|.....The path which indicates the
+|quickref_configuration_file|.....The path which indicates the
 configuration file
-|ctrlp_quickref_paths|..................The candidates of this plug-in.
+|quickref_paths|..................The candidates of this plug-in.
 
 -------------------------------------------------------------------------------
 Detailed descriptions and default values:~
 
-                                         *'g:ctrlp_quickref_readonly_enabled'*
+                                         *'g:quickref_readonly_enabled'*
 Set this to 0 to open files without readonly flag.
-    let g:ctrlp_quickref_readonly_enabled = 1
+    let g:quickref_readonly_enabled = 1
 
-                                         *'g:ctrlp_quickref_open_extensions'*
+                                         *'g:quickref_open_extensions'*
 If you open files which have extensions contained in this list, they are
 opened in specified browser or PDF viewer or else.
-    let g:ctrlp_quickref_open_extensions = ['html', 'pdf']
+    let g:quickref_open_extensions = ['html', 'pdf']
 
-                                         *'g:ctrlp_quickref_configuration_file'*
+                                         *'g:quickref_configuration_file'*
 This is the path which indicates the configuration file.
-    let g:ctrlp_quickref_configuration_file = '~/.ctrlp-quickref'
+    let g:quickref_configuration_file = '~/.quickref'
 
-                                         *'g:ctrlp_quickref_paths'*
+                                         *'g:quickref_paths'*
 This list contains paths which are the candidates of this plug-in.
-    let g:ctrlp_quickref_paths = []
+    let g:quickref_paths = []
 
 ===============================================================================
-COMMANDS                                            *ctrlp-quickref-commands*
+COMMANDS                                            *quickref-commands*
 
                                                          *:CtrlPQuickRef*
 :CtrlPQuickRef
@@ -116,16 +116,16 @@ COMMANDS                                            *ctrlp-quickref-commands*
 
                                                          *:CtrlPQuickRefEdit*
 :CtrlPQuickRefEdit
-    Open the configuration file (~/.ctrlp-quickref by default).
+    Open the configuration file (~/.quickref by default).
 
 ===============================================================================
-MAPPINGS                                            *ctrlp-quickref-mappings*
+MAPPINGS                                            *quickref-mappings*
 
 This plug-in defines no mappings. If you want to know mappings in CtrlP
 interface, read CtrlP help.
 
 ===============================================================================
-LICENSE                                            *ctrlp-quickref-license*
+LICENSE                                            *quickref-license*
 
 Copyright(c) 2015 Takatoshi Iwasa
 Released under the MIT license

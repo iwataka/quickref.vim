@@ -1,3 +1,2 @@
-com! CtrlPQuickRef cal ctrlp#init(ctrlp#quickref#id())
-com! CtrlPQuickRefLastDir cal ctrlp#init(ctrlp#reference#id(), {'dir': g:ctrlp_quickref_last_dir})
-com! CtrlPQuickRefEdit cal ctrlp#quickref#edit()
+com! Quickref cal quickref#start()
+com! QuickrefLastDir cal quickref#start_at_last_dir()
