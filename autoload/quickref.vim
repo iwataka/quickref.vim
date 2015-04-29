@@ -168,18 +168,19 @@ fu! s:detect_root_downward(dir, depth)
 endfu
 
 fu! s:add_to_cache(path)
+  let path = a:path =~ '/$' ? a:path : a:path.'/'
   let dir = fnamemodify(expand(g:quickref_cache_file), ':p:h')
   if !isdirectory(dir)
     call mkdir(dir, 'p')
   endif
   let lines = s:read_cache()
-  if !s:contains(lines, a:path)
-    call add(lines, a:path)
+  if index(lines, path) == -1
+    call add(lines, path)
     call writefile(lines, expand(g:quickref_cache_file))
   endif
 endfu
 
-fu! quickref#add_path_to_cache()
+fu! quickref#auto_detect()
   let fname = expand('%')
   let root = fnamemodify(expand(s:detect_root_upward(fname)), ':p')
   if !empty(root)
@@ -208,4 +209,33 @@ fu! quickref#clear_cache()
   if filereadable(expand(g:quickref_cache_file))
     call writefile([], expand(g:quickref_cache_file))
   endif
+endfu
+
+fu! quickref#add_path_to_cache(...)
+  if a:0 > 0
+    for p in a:000
+      call s:add_to_cache(p)
+    endfor
+  else
+    call s:add_to_cache(getcwd())
+  endif
+endfu
+
+fu! quickref#remove_path_from_cache(...)
+  let paths = s:read_cache()
+  if a:0 > 0
+    for p in a:000
+      call remove(paths, index(paths, p))
+    endfor
+  else
+    call remove(paths, index(paths, getcwd()))
+  endif
+  call writefile(paths, expand(g:quickref_cache_file))
+endfu
+
+fu! quickref#display_cache()
+  let paths = s:read_cache()
+  for p in paths
+    echom p
+  endfor
 endfu
