@@ -1,7 +1,7 @@
-if exists('g:loaded_ctrlp_reference') && g:loaded_ctrlp_reference || v:version < 700 || &cp
+if exists('g:loaded_ctrlp_open') && g:loaded_ctrlp_open || v:version < 700 || &cp
     finish
 endif
-let g:loaded_ctrlp_reference = 1
+let g:loaded_ctrlp_open = 1
 
 let s:open_command = ''
 if has('unix')
@@ -15,27 +15,27 @@ elsei has('mac')
 endif
 
 call add(g:ctrlp_ext_vars, {
-    \ 'init': 'ctrlp#reference#init()',
-    \ 'accept': 'ctrlp#reference#accept',
+    \ 'init': 'ctrlp#open#init()',
+    \ 'accept': 'ctrlp#open#accept',
     \ 'type': 'path',
     \ 'sort': 0,
     \ 'specinput': 0,
     \ })
 
-fu! ctrlp#reference#init()
+fu! ctrlp#open#init()
     let l:files = ctrlp#files()
     " If this is not here, the word 'Indexing...' is remained.
     cal ctrlp#progress('')
     retu l:files
 endf
 
-fu! ctrlp#reference#accept(mode, str)
+fu! ctrlp#open#accept(mode, str)
     if s:check_extension(a:str)
         call system(s:open_command.' '.a:str)
         call ctrlp#exit()
     el
         if g:ctrlp_quickref_readonly_enabled
-            aug ctrlp-reference
+            aug ctrlp-open
                 au!
                 au BufEnter *
                     \ setlocal readonly |
@@ -44,8 +44,8 @@ fu! ctrlp#reference#accept(mode, str)
             aug END
         endif
         call call('ctrlp#acceptfile', [a:mode, a:str])
-        if exists("#ctrlp-reference")
-            au! ctrlp-reference
+        if exists("#ctrlp-open")
+            au! ctrlp-open
         endif
     endif
 endf
@@ -61,6 +61,6 @@ endf
 
 let s:id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
 
-fu! ctrlp#reference#id()
+fu! ctrlp#open#id()
     retu s:id
 endf
