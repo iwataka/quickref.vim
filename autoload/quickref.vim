@@ -127,7 +127,7 @@ fu! quickref#clear_cache()
   endif
 endfu
 
-fu! quickref#add_path_to_cache(...)
+fu! quickref#add_to_cache(...)
   if a:0 > 0
     call s:add_to_cache(a:000)
   else
@@ -135,7 +135,7 @@ fu! quickref#add_path_to_cache(...)
   endif
 endfu
 
-fu! quickref#remove_path_from_cache(...)
+fu! quickref#remove_from_cache(...)
   if a:0 > 0
     call s:remove_from_cache(a:000)
   else
