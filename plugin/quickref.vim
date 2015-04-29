@@ -12,6 +12,6 @@ augroup quickref
   autocmd!
   autocmd BufNew *
         \ if g:quickref_auto_detect && !getbufvar('%', "<afile>") |
-          \ call quickref#auto_detect() |
+          \ call quickref#auto_detect("<afile>") |
         \ endif
 augroup END

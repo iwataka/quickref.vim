@@ -92,9 +92,8 @@ fu! s:detect_root_downward(dir, depth)
   retu ''
 endfu
 
-fu! quickref#auto_detect()
-  let fname = expand('%')
-  let root = fnamemodify(expand(s:detect_root_upward(fname)), ':p')
+fu! quickref#auto_detect(fname)
+  let root = fnamemodify(expand(s:detect_root_upward(a:fname)), ':p')
   if !empty(root)
     call s:add_to_cache(root)
     if g:quickref_auto_detect_depth >= 0
