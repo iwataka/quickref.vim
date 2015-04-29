@@ -18,7 +18,7 @@ Concretely, this can do these tasks:
   it.
 
 The third one uses the existing plug-ins which are so-called narrowing
-frameworks (currently only [CtrlP](https://github.com/kien/ctrlp.vim), but
+frameworks (currently only [CtrlP](https://github.com/ctrlpvim/ctrlp.vim), but
 planning to support [Unite](https://github.com/Shougo/unite.vim)).
 
 ## Usage
@@ -41,7 +41,7 @@ them to `g:quickref_paths` variable like this:
 
 Second one is running `:QuickrefAdd` and `:QuickrefRemove` command like this:
 
-    ```
+    ```vim
     " Registers the current working directory.
     :QuickrefAdd
     " Registers specified path.
@@ -51,7 +51,7 @@ Second one is running `:QuickrefAdd` and `:QuickrefRemove` command like this:
     " Removes specified path .
     :QuickrefRemove /C/D/
     " You can register several different paths at the same time.
-    :QuickrefAdd ~/A/B /C/*j
+    :QuickrefAdd ~/A/B /C/*
     ```
 
 ## CtrlP
@@ -69,7 +69,7 @@ execute specified task to it:
 
 ## Requirement
 
-+ [ctrlp.vim](https://github.com/kien/ctrlp.vim)
++ [ctrlp.vim](https://github.com/ctrlpvim/ctrlp.vim)
 
 + xdg-open (if you use Linux OS)
 
