@@ -173,3 +173,9 @@ fu! quickref#add_path_to_cache()
     call s:add_to_cache(root)
   endif
 endfu
+
+fu! quickref#clear_cache()
+  if filereadable(expand(g:quickref_cache_file))
+    call writefile([], expand(g:quickref_cache_file))
+  endif
+endfu
