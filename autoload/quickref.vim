@@ -100,17 +100,6 @@ fu! s:add_dirs(list, paths)
   endfor
 endf
 
-fu! s:rest_items(list, idx)
-  let result = []
-  let i = a:idx
-  let len = len(a:list)
-  while i < len
-    call add(result, get(a:list, i))
-    let i = i + 1
-  endwhile
-  retu result
-endfu
-
 fu! quickref#check_ext(fname)
   let ext = fnamemodify(expand(a:fname), ':t:e')
   for e in g:quickref_open_extensions
@@ -122,17 +111,13 @@ fu! quickref#check_ext(fname)
 endf
 
 fu! s:uniq(list)
-  let i = 0
-  let len = len(a:list)
   let result = []
-  while i < len - 1
+  for i in range(len(a:list))
     let item = get(a:list, i)
-    let rest = s:rest_items(a:list, i + 1)
-    if index(rest, item) == -1
+    if index(a:list, item, i + 1) == -1
       call add(result, item)
     endif
-    let i = i + 1
-  endwhile
+  endfor
   retu result
 endfu
 
