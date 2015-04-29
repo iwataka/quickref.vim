@@ -185,19 +185,23 @@ fu! quickref#add_path_to_cache()
   if !empty(root)
     call s:add_to_cache(root)
     if g:quickref_auto_detect_depth >= 0
-      let upper_dir = fnamemodify(substitute(root, '/$', '', ''), ':h')
-      let paths = split(glob(upper_dir.'/*'), '\n')
-      for p in paths
-        if isdirectory(p)
-          let another_root = s:detect_root_downward(p, g:quickref_auto_detect_depth)
-          let another_root = fnamemodify(expand(another_root), ':p')
-          if !empty(another_root)
-            call s:add_to_cache(another_root)
-          endif
-        endif
-      endfor
+      call s:add_neighbor_roots_to_cache(root)
     endif
   endif
+endfu
+
+fu! s:add_neighbor_roots_to_cache(path)
+  let upper_dir = fnamemodify(substitute(a:path, '/$', '', ''), ':h')
+  let paths = split(glob(upper_dir.'/*'), '\n')
+  for p in paths
+    if isdirectory(p)
+      let another_root = s:detect_root_downward(p, g:quickref_auto_detect_depth)
+      let another_root = fnamemodify(expand(another_root), ':p')
+      if !empty(another_root)
+        call s:add_to_cache(another_root)
+      endif
+    endif
+  endfor
 endfu
 
 fu! quickref#clear_cache()
