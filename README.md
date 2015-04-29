@@ -8,100 +8,73 @@ can view them without any effort!
 
 ## Introduction
 
-This plug-in is an extension of CtrlP and provides quick access to any
-references in your local environment. Install this plug-in and register some
-paths in specified variable or file, then you can open any files on the fly.
+This plug-in provides quick access to any references in your local environment.
+Concretely, this can do these tasks:
 
-This plug-in also detect extensions of files and when opening files with
-specified extensions like html or pdf, they are opened by "open-command"
-which is "open" in Mac OS, "xdg-open" in Linux OS, "start" in Windows OS or
-"cygstart" in Cygwin environment.
++ Detects the current project root and add it to its own cache automatically.
++ Provides commands which adds specified paths to the cache and removes them
+  from it.
++ Enable to select one of the paths quickly and executes an arbitrary task at
+  it.
+
+The third one uses the existing plug-ins which are so-called narrowing
+frameworks (currently only [CtrlP](https://github.com/kien/ctrlp.vim), but
+planning to support [Unite](https://github.com/Shougo/unite.vim)).
 
 ## Usage
 
-After installing this plug-in, you should register some paths you want to
-search in g:quickref_paths variable or ~/.quickref file. If you
-want to register paths in the variable, you should write them like below in
-your vimrc.
+You can get a buffer which contains some project roots you have accessed to
+and some directories you have registered by running `:Quickref` command. You can
+narrow the selections by typing characters, choose one of them and executes
+specified task to it.
+
+You have two ways to register arbitrary paths to the cache. First one is assigns
+them to `g:quickref_paths` variable like this:
 
     let g:quickref_paths = [
-        \ '/directory1/library_or_something_else/src',
-        \ '/directory2/*/src',
-        \ '/directory3/*',
-        " You want to exclude specified directory, put '!' at the head.
-        \ '! /directory3/library_or_something_else/'
+        \ '~/A/B'
+        " Wildcars are automatically expanded.
+        \ '/C/*',
+        " You want to exclude specified path, put '!' at the head.
+        \ '! /C/D/'
     ]
 
-Wildcards are automatically expanded.
-If you want to write paths in other file, you should make ~/.quickref
-file and write them like below in it.
+Second one is running `:QuickrefAdd` and `:QuickrefRemove` command like this:
 
-    # Write
-    # Some
-    # Comments
-    /directory1/library_or_something_else/src
-    /directory2/*/src
+    ```
+    " Registers the current working directory.
+    :QuickrefAdd
+    " Registers specified path.
+    :QuickrefAdd ~/A/B
+    " Registers specified path which contains wildcars.
+    :QuickrefAdd /C/*
+    " Removes specified path .
+    :QuickrefRemove /C/D/
+    " You can register several different paths at the same time.
+    :QuickrefAdd ~/A/B /C/*j
+    ```
 
-    # Additional comment
-    /directory3/*
+## CtrlP
 
-    # You can also exclude specified directory by writing like this
-    ! /directory3/library_or_something_else
+If you want to know the outline of using `CtrlP` interface, see its help. When
+running `:Quickref` command, you get `CtrlP` interface containing the registered
+paths and can select one of them by typing characters. You have four keys to
+execute specified task to it:
 
-That's all you should do. As you can see, you can write paths like doing in
-gitignore or something like that.
-
-Then you run the command :CtrlPQuickRef and get CtrlP interface with paths
-which are registered by you. After you choose one of them by typing some
-characters and hit Enter, you get CtrlP interface again with files in selected
-path. If you selected one or more of these files, they are opened in Vim. They
-are opened with readonly flag by default.  Doing like this, you can open any
-files on the fly.
-
-## Commands
-
-+ :CtrlPQuickRef
-
-    Open CtrlP interface with specified paths.
-
-+ :CtrlPQuickRefEdit
-
-    Open the configuration file (~/.quickref by default).
-
-## Options
-
-+ quickref_readonly_enabled
-
-    Set this to 0 to open files without readonly flag (default: 1).
-
-+ quickref_open_extensions
-
-    If you open files which have extensions contained in this list, they are
-    opened by "open-command" (default: ['html', 'pdf']).
-
-+ quickref_configuration_file
-
-    If you want to write paths in other file, set this to the path (default:
-    '~/.quickref').
-
-+ quickref_paths
-
-    This list contains paths which are the candidates of this plug-in (default:
-    []).
++ `<Enter>` to get `CtrlP` interface again in the selected path and select one
+  or more of the files in it.
++ `<C-t>` to move the current directory to the selected one.
++ `<C-v>` to do the same thing as `<C-t>`
++ `<C-x>` to get the file-explorer in the selected path.
 
 ## Requirement
 
 + [ctrlp.vim](https://github.com/kien/ctrlp.vim)
 
-+ xdg-open command (if you use Linux OS)
-
-+ [ctrlp-py-matcher](https://github.com/FelikZ/ctrlp-py-matcher)(optional, but
-    recommended)
-
-+ [the_silver_searhcer](https://github.com/ggreer/the_silver_searcher)(optional,
-    but recommended)
++ xdg-open (if you use Linux OS)
 
 ## Installation
 
-Clone this repository and put that directory in ~/.vim.
-You can also use your favorite package manager to install this.
+You can use your favorite package manager to install this. If you don't have
+your own package manager for Vim, I recommend
+[vim-plug](https://github.com/junegunn/vim-plug) to you!
