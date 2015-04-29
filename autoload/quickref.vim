@@ -48,8 +48,7 @@ fu! quickref#start_at_last_dir()
 endfu
 
 fu! quickref#path_list()
-    let path_list = s:validate(s:readcache()) + s:read_var() + s:rtps()
-    retu s:uniq(path_list)
+    retu s:uniq(s:readcache() + s:read_var() + s:rtps())
 endfu
 
 fu! s:read_path_list(lines)
