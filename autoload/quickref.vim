@@ -28,7 +28,7 @@ if !exists('g:quickref_paths')
 endif
 
 if !exists('g:quickref_auto_detect_depth')
-  let g:quickref_auto_detect_depth = 0
+  let g:quickref_auto_detect_depth = -1
 endif
 
 fu! quickref#start()
