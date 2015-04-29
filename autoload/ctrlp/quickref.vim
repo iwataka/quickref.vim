@@ -17,8 +17,12 @@ endf
 
 fu! ctrlp#quickref#accept(mode, str)
     call ctrlp#exit()
-    let s:last_dir = a:str
-    call ctrlp#init(ctrlp#open#id(), { 'dir': a:str })
+    if a:mode == 't'
+        silent exe 'cd '.a:str
+    else
+        let s:last_dir = a:str
+        call ctrlp#init(ctrlp#open#id(), { 'dir': a:str })
+    endif
 endf
 
 fu! ctrlp#quickref#last_dir()
