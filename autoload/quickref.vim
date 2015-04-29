@@ -19,6 +19,14 @@ if !exists('g:quickref_include_rtp')
   let g:quickref_include_rtp = 1
 endif
 
+if !exists('g:quickref_root_markers')
+  let g:quickref_root_markers = ['.git', '.hg', '.svn', '.bzr', '_darcs']
+endif
+
+if !exists('g:quickref_paths')
+  let g:quickref_paths = []
+endif
+
 fu! quickref#start()
   if g:loaded_ctrlp
     call ctrlp#init(ctrlp#quickref#id())
@@ -132,4 +140,36 @@ fu! s:uniq(list)
     let i = i + 1
   endwhile
   retu result
+endfu
+
+fu! s:root(fname)
+  let dir = fnamemodify(expand(a:fname), ':p:h')
+  for mark in g:quickref_root_markers
+    let rdir = finddir(mark, dir.';')
+    if !empty(rdir)
+      retu fnamemodify(rdir, ':h')
+    endif
+  endfor
+  retu ''
+endfu
+
+fu! s:add_to_cache(path)
+  let dir = fnamemodify(expand(g:quickref_cache_file), ':p:h')
+  if !isdirectory(dir)
+    call mkdir(dir, 'p')
+  endif
+  let lines = []
+  if filereadable(expand(g:quickref_cache_file))
+    call extend(lines, readfile(expand(g:quickref_cache_file)))
+  endif
+  call add(lines, a:path)
+  call writefile(lines, expand(g:quickref_cache_file))
+endfu
+
+fu! quickref#add_path_to_cache()
+  let fname = expand('%')
+  let root = fnamemodify(expand(s:root(fname)), ':p')
+  if !empty(root)
+    call s:add_to_cache(root)
+  endif
 endfu

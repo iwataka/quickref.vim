@@ -1,2 +1,7 @@
-com! Quickref cal ctrlp#init(ctrlp#quickref#id())
-com! QuickrefLastdir cal ctrlp#quickref#last_dir()
+com! Quickref cal quickref#start()
+com! QuickrefLastDir cal quickref#start_at_last_dir()
+
+augroup quickref
+  autocmd!
+  autocmd BufNew * call quickref#add_path_to_cache()
+augroup END
