@@ -144,7 +144,8 @@ fu! s:detect_root_downward(dir, depth)
 endfu
 
 fu! s:add_to_cache(path)
-  let path = a:path =~ '/$' ? a:path : a:path.'/'
+  let path = resolve(a:path)
+  let path = path =~ '/$' ? path : path.'/'
   let dir = fnamemodify(expand(g:quickref_cache_file), ':p:h')
   if !isdirectory(dir)
     call mkdir(dir, 'p')
