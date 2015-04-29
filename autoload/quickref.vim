@@ -69,7 +69,7 @@ fu! s:read_path_list(lines)
   endfor
   let l:paths = []
   for path in l:inclusive_paths
-    if !s:contains(exclusive_paths, path)
+    if index(exclusive_paths, path) == -1
       call add(l:paths, path)
     endif
   endfor
@@ -100,15 +100,6 @@ fu! s:add_dirs(list, paths)
   endfor
 endf
 
-fu! s:contains(list, item)
-  for i in a:list
-    if i == a:item
-      retu 1
-    endif
-  endfor
-  retu 0
-endf
-
 fu! s:rest_items(list, idx)
   let result = []
   let i = a:idx
@@ -137,7 +128,7 @@ fu! s:uniq(list)
   while i < len - 1
     let item = get(a:list, i)
     let rest = s:rest_items(a:list, i + 1)
-    if !s:contains(rest, item)
+    if index(rest, item) == -1
       call add(result, item)
     endif
     let i = i + 1
